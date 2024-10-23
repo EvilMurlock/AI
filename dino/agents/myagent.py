@@ -27,7 +27,14 @@ class MyAgent(Agent):
                     curr_distance = left_distance
         # find closest future obstacle
         return closest_ob
-    
+    @staticmethod
+    def obstacle_behind_barrier(obstacle):
+        barrier_position_guess = 1100 - 350
+        if obstacle.rect.x + obstacle.rect.width > barrier_position_guess:
+            return True
+        else:
+            return False
+        
     @staticmethod
     def get_move(game: Game) -> DinoMove:
         """
@@ -77,43 +84,88 @@ class MyAgent(Agent):
                 )
 
         dino = game.dino
-        # Dy implementation:
+        
+        # My implementation:
         closest_obstacle = MyAgent.GetClosestObstacle(game)
         if(closest_obstacle == None):
             return DinoMove.NO_MOVE
         
-        game.add_moving_line(
-            Coords(closest_obstacle.rect.x, closest_obstacle.rect.y), Coords(closest_obstacle.rect.x + closest_obstacle.rect.width, closest_obstacle.rect.y + closest_obstacle.rect.height), "purple"
-        )
-
-        if dino.body.y > closest_obstacle.rect.y + closest_obstacle.rect.height:
+        if MyAgent.debug:
+            game.add_moving_line(
+                Coords(closest_obstacle.rect.x, closest_obstacle.rect.y), Coords(closest_obstacle.rect.x + closest_obstacle.rect.width, closest_obstacle.rect.y + closest_obstacle.rect.height), "purple"
+            )
+            game.add_moving_line(
+                Coords(dino.head.x, dino.head.y), Coords(dino.head.x + dino.head.width, dino.head.y + dino.head.height), "red"
+            )
+            game.add_moving_line(
+                Coords(dino.body.x, dino.body.y), Coords(dino.body.x + dino.body.width, dino.body.y + dino.body.height), "red"
+            )
+            print("Next OBstacle Behind berrier: "+str(MyAgent.obstacle_behind_barrier(closest_obstacle)))
+            #if(not MyAgent.obstacle_behind_barrier(closest_obstacle)):
+            game.add_moving_line(
+            Coords(1100 - 350,1000), Coords(1100 - 350, -500), "red"
+            )
+        if dino.Y_DUCK > closest_obstacle.rect.y + closest_obstacle.rect.height:
+            
+            if(dino.x > game.WIDTH/2 - 300 and dino.jump_vel == 20) or MyAgent.obstacle_behind_barrier(closest_obstacle):
+                pass
+            #return DinoMove.LEFT
+            else:
+                pass
+                if MyAgent.debug:
+                    print("DUCKING RIGHT")
+                #return DinoMove.DOWN_RIGHT
+            
             return DinoMove.DOWN
-        if dino.x + dino.body.width < closest_obstacle.rect.x + 300:
-            return DinoMove.UP_RIGHT
-        return DinoMove.NO_MOVE
-        # more Y means more Down
-        # JUMPING CODE
-        # DUCKING CODE
-        # RETREAT LEFT CODE
+
+        if dino.head.x + dino.head.width > closest_obstacle.rect.x - 50 - game.speed * 5 and not MyAgent.obstacle_behind_barrier(closest_obstacle):
+            #print("Distance to obstacle: "+str(dino.head.x + dino.head.width-closest_obstacle.rect.x))
+
+
+
+            # RETREAT CHECK (CHICKEN OUT CHECK)
+            # END OF CHICKEN CODE
+
+            if MyAgent.debug:
+                print("Jumping over obstacle")
+            if(dino.body.y + dino.body.height > closest_obstacle.rect.y):
+                return DinoMove.UP
+            else:
+                return DinoMove.RIGHT
+        
+        if dino.jump_vel > -10 and not MyAgent.obstacle_behind_barrier(closest_obstacle):# and (dino.body.y + dino.body.height > closest_obstacle.rect.y):
+            
+            if MyAgent.debug:
+                print("Double jumping")
+                #print("Y Velocity < 0 is = "+ str(dino.jump_vel))
+
+            if dino.head.x + dino.head.width > closest_obstacle.rect.x - 250 - game.speed * 5: # we are close enough to jump over ???MAYBE
+                return DinoMove.RIGHT
+            
+        else:
+            if MyAgent.debug:
+                print("Retreat check")
+            if dino.head.x + dino.head.width >= closest_obstacle.rect.x: # we CANT jump over obstacle, but we are over it
+                if MyAgent.debug:
+                    print("RETREATING")
+                return DinoMove.LEFT
+            #if(dino.body.y + dino.body.height - closest_obstacle.rect.y > dino.body.x - (closest_obstacle.rect.x +closest_obstacle.rect.width)):
+            #    return DinoMove.RIGHT
+            #else:
+            #    return DinoMove.LEFT
 
         """
-        # Dummy implementation:
-        x = game.dino.x
-        dino_lowest = game.dino.body.y + game.dino.body.height
-        for o in game.obstacles:
-            if o.rect.x > x and o.rect.x < x + 120 + 5 * (
-                game.speed - 5
-            ):
-                if MyAgent.verbose:
-                    print("jumping right")
-                return DinoMove.UP
-            if dino_lowest < o.rect.y and o.rect.coords.x < x + 150:
-                if MyAgent.verbose:
-                    print("running right")
-                return DinoMove.RIGHT
-            if o.rect.x < x and o.rect.x + 105 > x:
-                if MyAgent.verbose:
-                    print("running right")
-                return DinoMove.RIGHT
+        if(dino.x > game.WIDTH/2 - 300 and dino.jump_vel == 20) or MyAgent.obstacle_behind_barrier(closest_obstacle):
+            pass
+            #return DinoMove.LEFT
+        else:
+            pass
+            if MyAgent.debug:
+                    print("GOING RIGHT")
+        
+            return DinoMove.RIGHT
         """
+        return DinoMove.NO_MOVE
+        # more Y means more Down, more x means more left <===
+
         

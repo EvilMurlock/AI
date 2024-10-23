@@ -1,1 +1,18 @@
-"C:/Program Files/Python311/python.exe" "c:/Users/koprd/Desktop/škola vyučování/4 rok zim semester/Umělá Inteligence 1/AI/dino/play_dino.py" -a MyAgent -d -f 120 --delay 5000
+FAST:
+"C:/Program Files/Python311/python.exe" "c:/Users/koprd/Desktop/škola vyučování/4 rok zim semester/Umělá Inteligence 1/AI/dino/play_dino.py" -a MyAgent -d -f 120 --delay 1000
+python "Desktop/škola vyučování/4 rok zim semester/Umělá Inteligence 1/AI/dino/play_dino.py" -a MyAgent -d -f 120 --delay 1000
+SLOW:
+"C:/Program Files/Python311/python.exe" "c:/Users/koprd/Desktop/škola vyučování/4 rok zim semester/Umělá Inteligence 1/AI/dino/play_dino.py" -a MyAgent -d -f 60 --delay 1000
+python "Desktop/škola vyučování/4 rok zim semester/Umělá Inteligence 1/AI/dino/play_dino.py" -a MyAgent -d -f 60 --delay 1000
+
+
+
+
+
+
+
+
+
+
+
+

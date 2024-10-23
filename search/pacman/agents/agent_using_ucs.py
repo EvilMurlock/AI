@@ -16,18 +16,19 @@ class PacProblem(Problem):
         self.game: Game = game
 
     def initial_state(self) -> int:
-        return 0
+        return self.game.pac_loc
 
     def actions(self, state: int) -> List[int]:
         return [0,1,2,3]
 
     def result(self, state: int, action: int) -> int:
-        return 0
+        return self.game.get_neighbor(state, action)
 
     def is_goal(self, state: int) -> bool:
         return True
 
     def cost(self, state: int, action: int) -> float:
+        #vraci nejleksi cestu, ne nejkratsi
         return 1
 
 
