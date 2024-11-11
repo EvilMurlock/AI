@@ -20,10 +20,10 @@ class Agent_Example(PacManControllerBase):
         nearest = game.get_target(current, targets, True, DM.PATH)
 
         # # EXAMPLE OF VISUAL DEBUGGING
-        # from game.pac_gui import PacView
+        from game.pac_gui import PacView
 
         # # add the path that pac-man is following
-        # PacView.add_points(game, "green", game.get_path(current, nearest))
+        #PacView.add_points(game, "green", game.get_path(current, nearest))
 
         # # add the path from pac-man to the nearest existing power pill
         # nearest_pp = game.get_target(current, active_power_pills, True, DM.PATH)

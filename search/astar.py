@@ -15,14 +15,6 @@ class Node(object):
     def __lt__(self, other):
         return self.cost < other.cost
 
-def whereToInsertBasedOnCost(cost, collection):
-    index = 0
-    for (x,y , nodeCost) in collection:
-
-        if(cost > nodeCost):
-            return index
-        index+=1
-    return index
 
 def AStar(prob: HeuristicProblem) -> Solution:
     """Return Solution of the problem solved by AStar search."""
@@ -46,24 +38,24 @@ def AStar(prob: HeuristicProblem) -> Solution:
         node = heapq.heappop(collection)#collection.pop()
 
         explored_node_count+=1
-        if(explored_node_count%1000 == 0):
+        if(explored_node_count%1000 == 0 and debug):
             print("Node count: "+str(explored_node_count))
 
         if visited_states.__contains__(node.state):
             #print("Repeating")
             continue
         else:
-            visited_states[node.state] = node.actions
+            visited_states[node.state] = None#node.actions
         
 
         if(prob.is_goal(node.state)):
-            final_actions = visited_states[node.state]
+            final_actions = node.actions#visited_states[node.state]
             return Solution(final_actions, node.state, node.cost)
 
         for a in prob.actions(node.state):
             new_state = prob.result(node.state, a)
             cost = prob.cost(node.state, a)
-            action_list = visited_states[node.state].copy()
+            action_list = node.actions.copy() #visited_states[node.state].copy()
             #print(action_list)
             #print(state)
             action_list.append(a)
